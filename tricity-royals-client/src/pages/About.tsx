@@ -42,12 +42,6 @@ export default function About() {
 
   return (
     <div className="bg-gradient-to-b from-white to-blue-50 min-h-screen p-6">
-  <div className="text-lg">
-  <div className="hidden md:block bg-purple-500 text-white p-2">🌐 md:block is WORKING!</div>
-  <div className="block md:hidden text-gray-800 p-2">📱 md:hidden is showing on mobile</div>
-</div>
-
-
       <div className="max-w-5xl mx-auto space-y-20">
         {/* Title */}
         <div className="text-center">
