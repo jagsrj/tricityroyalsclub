@@ -1,116 +1,188 @@
-// src/pages/MemberSignUp.tsx
 import { useState } from 'react'
+
+const sportsOptions = ['Cricket', 'Volleyball', 'Pickleball', 'Badminton']
+const ageGroups = ['U13', 'U17', 'Adult']
+const experienceLevels = ['Beginner', 'Intermediate', 'Advanced']
 
 export default function MemberSignUp() {
   const [form, setForm] = useState({
     name: '',
     email: '',
     phone: '',
-    sport: '',
+    sports: [] as string[],
     ageGroup: '',
     experience: '',
     notes: '',
   })
 
-  const [submitted, setSubmitted] = useState(false)
-
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-    setForm({ ...form, [e.target.name]: e.target.value })
+    const { name, value } = e.target
+    setForm((prev) => ({ ...prev, [name]: value }))
+  }
+
+  const handleMultiSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const selected = Array.from(e.target.selectedOptions, (option) => option.value)
+    setForm((prev) => ({ ...prev, sports: selected }))
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-
     try {
-        const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/signup`, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json"
-            },
-            body: JSON.stringify(form)
-          })
-          
+      const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/signup`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(form),
+      })
 
-      if (res.ok) {
-        setSubmitted(true)
+      const result = await res.json()
+      if (result.success) {
+        alert('🎉 Registration successful!')
+        setForm({
+          name: '',
+          email: '',
+          phone: '',
+          sports: [],
+          ageGroup: '',
+          experience: '',
+          notes: '',
+        })
       } else {
-        alert("There was a problem submitting the form.")
+        alert('⚠️ There was a problem submitting the form.')
       }
-    } catch (error) {
-      console.error("Form submission error:", error)
-      alert("Something went wrong.")
+    } catch (err) {
+      console.error('Submission error:', err)
     }
   }
 
-  if (submitted) {
-    return (
-      <div className="max-w-2xl mx-auto px-4 py-16 text-center">
-        <h2 className="text-2xl font-bold text-green-700 mb-4">🎉 Submitted Successfully!</h2>
-        <p className="text-gray-700">Your request has been received. A club admin will review your submission and contact you shortly.</p>
-      </div>
-    )
-  }
-
   return (
-    <div className="max-w-3xl mx-auto px-4 py-10">
-      <h1 className="text-3xl font-bold text-center text-blue-800 mb-8">📝 Member Sign-Up</h1>
+    <div className="max-w-2xl mx-auto px-6 py-10 bg-white rounded-xl shadow-lg mt-8">
+      <h1 className="text-3xl font-bold text-blue-800 mb-6 text-center">🏅 Join Tricity Royals Club</h1>
 
-      <form onSubmit={handleSubmit} className="space-y-6 bg-white p-6 rounded-xl shadow">
+      <form onSubmit={handleSubmit} className="space-y-6">
+        {/* Name */}
         <div>
-          <label className="block text-sm font-medium text-gray-700">Full Name</label>
-          <input name="name" value={form.name} onChange={handleChange} required className="mt-1 block w-full rounded border border-gray-300 px-3 py-2" />
+          <label className="block mb-1 font-medium text-gray-700">Full Name</label>
+          <input
+            type="text"
+            name="name"
+            value={form.name}
+            onChange={handleChange}
+            required
+            className="w-full border rounded px-3 py-2"
+          />
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-700">Email</label>
-            <input type="email" name="email" value={form.email} onChange={handleChange} required className="mt-1 block w-full rounded border border-gray-300 px-3 py-2" />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700">Phone Number</label>
-            <input type="tel" name="phone" value={form.phone} onChange={handleChange} required className="mt-1 block w-full rounded border border-gray-300 px-3 py-2" />
-          </div>
-        </div>
-
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-700">Sport</label>
-            <select name="sport" value={form.sport} onChange={handleChange} required className="mt-1 block w-full rounded border border-gray-300 px-3 py-2">
-              <option value="">Select</option>
-              <option value="Cricket">Cricket</option>
-              <option value="Volleyball">Volleyball</option>
-              <option value="Pickleball">Pickleball</option>
-              <option value="Badminton">Badminton</option>
-            </select>
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700">Age Group</label>
-            <select name="ageGroup" value={form.ageGroup} onChange={handleChange} required className="mt-1 block w-full rounded border border-gray-300 px-3 py-2">
-              <option value="">Select</option>
-              <option value="U12">U12</option>
-              <option value="U19">U19</option>
-              <option value="Adult">Adult</option>
-            </select>
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700">Experience Level</label>
-            <select name="experience" value={form.experience} onChange={handleChange} required className="mt-1 block w-full rounded border border-gray-300 px-3 py-2">
-              <option value="">Select</option>
-              <option value="Beginner">Beginner</option>
-              <option value="Intermediate">Intermediate</option>
-              <option value="Advanced">Advanced</option>
-            </select>
-          </div>
-        </div>
-
+        {/* Email */}
         <div>
-          <label className="block text-sm font-medium text-gray-700">Notes</label>
-          <textarea name="notes" value={form.notes} onChange={handleChange} rows={3} className="mt-1 block w-full rounded border border-gray-300 px-3 py-2"></textarea>
+          <label className="block mb-1 font-medium text-gray-700">Email</label>
+          <input
+            type="email"
+            name="email"
+            value={form.email}
+            onChange={handleChange}
+            required
+            className="w-full border rounded px-3 py-2"
+          />
         </div>
 
-        <button type="submit" className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition">
-          Submit
-        </button>
+        {/* Phone */}
+        <div>
+          <label className="block mb-1 font-medium text-gray-700">Phone</label>
+          <input
+            type="tel"
+            name="phone"
+            value={form.phone}
+            onChange={handleChange}
+            required
+            className="w-full border rounded px-3 py-2"
+          />
+        </div>
+
+        {/* Multi-select Sports */}
+        <div>
+  <label className="block mb-1 font-medium text-gray-700">Select Sports (you can choose multiple)</label>
+  <select
+    name="sports"
+    multiple
+    value={form.sports}
+    onChange={handleMultiSelectChange}
+    required
+    className="w-full border rounded px-3 py-2 h-40"
+  >
+    <optgroup label="Cricket">
+      <option value="Cricket-Leather">Leather Ball</option>
+      <option value="Cricket-Tennis">Tennis Ball</option>
+    </optgroup>
+    <optgroup label="Other Sports">
+      <option value="Volleyball">Volleyball</option>
+      <option value="Pickleball">Pickleball</option>
+      <option value="Badminton">Badminton</option>
+    </optgroup>
+  </select>
+  <p className="text-sm text-gray-500 mt-1">Hold Ctrl/Cmd to select multiple sports.</p>
+</div>
+
+
+        {/* Age Group */}
+        <div>
+          <label className="block mb-1 font-medium text-gray-700">Age Group</label>
+          <select
+            name="ageGroup"
+            value={form.ageGroup}
+            onChange={handleChange}
+            required
+            className="w-full border rounded px-3 py-2"
+          >
+            <option value="">Select an option</option>
+            {ageGroups.map((age) => (
+              <option key={age} value={age}>
+                {age}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        {/* Experience Level */}
+        <div>
+          <label className="block mb-1 font-medium text-gray-700">Experience Level</label>
+          <select
+            name="experience"
+            value={form.experience}
+            onChange={handleChange}
+            required
+            className="w-full border rounded px-3 py-2"
+          >
+            <option value="">Select an option</option>
+            {experienceLevels.map((level) => (
+              <option key={level} value={level}>
+                {level}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        {/* Notes */}
+        <div>
+          <label className="block mb-1 font-medium text-gray-700">Notes (optional)</label>
+          <textarea
+            name="notes"
+            value={form.notes}
+            onChange={handleChange}
+            rows={3}
+            className="w-full border rounded px-3 py-2"
+            placeholder="Any additional details..."
+          />
+        </div>
+
+        {/* Submit */}
+        <div className="text-center">
+          <button
+            type="submit"
+            className="bg-blue-700 text-white font-semibold px-6 py-2 rounded hover:bg-blue-800"
+          >
+            Submit Registration
+          </button>
+        </div>
       </form>
     </div>
   )

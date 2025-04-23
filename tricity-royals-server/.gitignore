@@ -1,0 +1,9 @@
+# Ignore environment files
+.env
+
+# Ignore compiled output (if using tsc later)
+dist/
+build/
+
+# Node.js dependencies
+node_modules/

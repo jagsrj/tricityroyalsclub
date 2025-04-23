@@ -1,4 +1,3 @@
-// src/pages/AdminDashboard.tsx
 import { useEffect, useState } from 'react'
 
 interface Member {
@@ -6,7 +5,7 @@ interface Member {
   name: string
   email: string
   phone: string
-  sport: string
+  sports: string[] // ✅ updated from `sport` to `sports`
   ageGroup: string
   experience: string
   notes: string | null
@@ -63,7 +62,26 @@ export default function AdminDashboard() {
             >
               <h2 className="text-xl font-semibold text-blue-700">{member.name}</h2>
               <p className="text-sm text-gray-600">{member.email} • {member.phone}</p>
-              <p><strong>Sport:</strong> {member.sport}</p>
+
+              {/* ✅ Display sports as badges */}
+              <div>
+                <strong>Sports:</strong>
+                <div className="flex flex-wrap gap-1 mt-1">
+                  {member.sports && member.sports.length > 0 ? (
+                    member.sports.map((s, idx) => (
+                      <span
+                        key={idx}
+                        className="bg-blue-100 text-blue-800 text-xs px-2 py-0.5 rounded-full"
+                      >
+                        {s}
+                      </span>
+                    ))
+                  ) : (
+                    <span className="text-sm text-gray-500">No sports selected</span>
+                  )}
+                </div>
+              </div>
+
               <p><strong>Age Group:</strong> {member.ageGroup}</p>
               <p><strong>Experience:</strong> {member.experience}</p>
               {member.notes && <p className="text-gray-600"><strong>Notes:</strong> {member.notes}</p>}
