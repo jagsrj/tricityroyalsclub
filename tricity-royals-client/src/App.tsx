@@ -1,4 +1,5 @@
 import Navbar from './components/Navbar'
+import Footer from './components/Footer'
 import { Route, Switch } from 'wouter'
 
 import Home from './pages/Home'
@@ -10,7 +11,6 @@ import Contact from './pages/Contact'
 import MemberSignUp from './pages/MemberSignUp'
 import AdminDashboard from './pages/AdminDashboard'
 import TeamList from './pages/TeamList'
-
 
 export default function App() {
   return (
@@ -30,6 +30,7 @@ export default function App() {
           <Route>404 – Page not found</Route>
         </Switch>
       </div>
+      <Footer />
     </>
   )
 }
