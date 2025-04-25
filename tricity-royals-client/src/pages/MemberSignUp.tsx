@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-const sportsOptions = ['Cricket', 'Volleyball', 'Pickleball', 'Badminton']
+//const sportsOptions = ['Cricket', 'Volleyball', 'Pickleball', 'Badminton']
 const ageGroups = ['U13', 'U17', 'Adult']
 const experienceLevels = ['Beginner', 'Intermediate', 'Advanced']
 
