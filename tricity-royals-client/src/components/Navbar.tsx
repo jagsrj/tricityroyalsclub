@@ -9,7 +9,8 @@ const navItems = [
   { name: 'Tournaments', path: '/tournaments' },
   { name: 'Sponsors', path: '/sponsors' },
   { name: 'Contact', path: '/contact' },
-  { name: 'Sign Up', path: '/signup' }
+  { name: 'Sign Up', path: '/signup' },
+  { name: 'Admin', path: '/admin' }
 
 ]
 

@@ -11,6 +11,10 @@ import Contact from './pages/Contact'
 import MemberSignUp from './pages/MemberSignUp'
 import AdminDashboard from './pages/AdminDashboard'
 import TeamList from './pages/TeamList'
+import AdminLogin from './pages/AdminLogin'
+import ProtectedRoute from './components/ProtectedRoute'
+
+
 
 export default function App() {
   return (
@@ -27,6 +31,9 @@ export default function App() {
           <Route path="/signup" component={MemberSignUp} />
           <Route path="/admin" component={AdminDashboard} />
           <Route path="/TeamList" component={TeamList} />
+          <Route path="/admin-login" component={AdminLogin} />
+          <Route path="/admin" component={() => <ProtectedRoute component={AdminDashboard} />} />
+
           <Route>404 – Page not found</Route>
         </Switch>
       </div>
