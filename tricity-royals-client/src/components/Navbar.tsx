@@ -10,13 +10,13 @@ const navItems = [
   { name: 'Sponsors', path: '/sponsors' },
   { name: 'Contact', path: '/contact' },
   { name: 'Sign Up', path: '/signup' },
-  { name: 'Admin', path: '/admin' }
-
 ]
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false)
   const [location] = useLocation()
+
+  const isAdminLoggedIn = localStorage.getItem('trc_admin_logged_in') === 'true'
 
   return (
     <nav className="sticky top-0 z-50 bg-white/70 backdrop-blur-md shadow border-b border-blue-100">
@@ -46,6 +46,18 @@ export default function Navbar() {
               {item.name}
             </Link>
           ))}
+
+          {/* ✅ Dynamic Admin Link */}
+          <Link
+            href={isAdminLoggedIn ? '/admin' : '/admin-login'}
+            className={`font-medium transition ${
+              location === (isAdminLoggedIn ? '/admin' : '/admin-login')
+                ? 'text-blue-900 underline underline-offset-4'
+                : 'text-blue-700 hover:text-blue-900'
+            }`}
+          >
+            {isAdminLoggedIn ? 'Admin Dashboard' : 'Admin Login'}
+          </Link>
         </div>
 
         {/* Mobile toggle button */}
@@ -81,6 +93,19 @@ export default function Navbar() {
                 {item.name}
               </Link>
             ))}
+
+            {/* ✅ Mobile view Admin link */}
+            <Link
+              href={isAdminLoggedIn ? '/admin' : '/admin-login'}
+              onClick={() => setMenuOpen(false)}
+              className={`block py-2 text-sm font-medium ${
+                location === (isAdminLoggedIn ? '/admin' : '/admin-login')
+                  ? 'text-blue-900 underline underline-offset-4'
+                  : 'text-blue-700 hover:text-blue-900'
+              }`}
+            >
+              {isAdminLoggedIn ? 'Admin Dashboard' : 'Admin Login'}
+            </Link>
           </motion.div>
         )}
       </AnimatePresence>

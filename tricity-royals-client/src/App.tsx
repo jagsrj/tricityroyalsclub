@@ -1,5 +1,4 @@
 import Navbar from './components/Navbar'
-import Footer from './components/Footer'
 import { Route, Switch } from 'wouter'
 
 import Home from './pages/Home'
@@ -10,11 +9,10 @@ import Sponsors from './pages/Sponsors'
 import Contact from './pages/Contact'
 import MemberSignUp from './pages/MemberSignUp'
 import AdminDashboard from './pages/AdminDashboard'
-import TeamList from './pages/TeamList'
 import AdminLogin from './pages/AdminLogin'
-import ProtectedRoute from './components/ProtectedRoute'
+import TeamList from './pages/TeamList'
 
-
+import ProtectedRoute from './components/ProtectedRoute' // ✅ import
 
 export default function App() {
   return (
@@ -29,15 +27,12 @@ export default function App() {
           <Route path="/sponsors" component={Sponsors} />
           <Route path="/contact" component={Contact} />
           <Route path="/signup" component={MemberSignUp} />
-          <Route path="/admin" component={AdminDashboard} />
-          <Route path="/TeamList" component={TeamList} />
           <Route path="/admin-login" component={AdminLogin} />
-          <Route path="/admin" component={() => <ProtectedRoute component={AdminDashboard} />} />
-
+          <Route path="/admin" component={() => <ProtectedRoute component={AdminDashboard} />} /> {/* ✅ Protected */}
+          <Route path="/TeamList" component={TeamList} />
           <Route>404 – Page not found</Route>
         </Switch>
       </div>
-      <Footer />
     </>
   )
 }

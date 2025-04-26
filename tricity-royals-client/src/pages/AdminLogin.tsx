@@ -1,42 +1,41 @@
-// src/pages/AdminLogin.tsx
 import { useState } from 'react'
 import { useLocation } from 'wouter'
 
-const ADMIN_PASSWORD = import.meta.env.VITE_ADMIN_PASSWORD || 'trcadmin123'
-
 export default function AdminLogin() {
-  const [, setLocation] = useLocation()
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
+  const [, navigate] = useLocation()
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    if (password === ADMIN_PASSWORD) {
-      //localStorage.setItem('trc_admin_logged_in', 'true')
-      sessionStorage.setItem('trc_admin_logged_in', 'true')
+    const adminPassword = import.meta.env.VITE_ADMIN_PASSWORD
 
-      setLocation('/admin')
+    if (password === adminPassword) {
+      localStorage.setItem('trc_admin_logged_in', 'true')
+      localStorage.removeItem('trc_admin_cooldown')
+      navigate('/admin') // 👉 Redirect immediately
     } else {
-      setError('Invalid password')
+      setError('Incorrect password')
     }
   }
 
   return (
-    <div className="max-w-md mx-auto mt-24 p-6 bg-white rounded-lg shadow">
-      <h1 className="text-2xl font-bold text-center text-blue-800 mb-4">🔐 Admin Login</h1>
-      <form onSubmit={handleLogin} className="space-y-4">
+    <div className="min-h-screen flex items-center justify-center p-6">
+      <form
+        onSubmit={handleSubmit}
+        className="bg-white p-8 rounded-lg shadow-md w-full max-w-sm space-y-4"
+      >
+        <h1 className="text-2xl font-bold text-center text-blue-800">Admin Login</h1>
         <input
           type="password"
-          className="w-full border p-2 rounded"
-          placeholder="Enter admin password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
+          placeholder="Enter admin password"
+          className="border rounded w-full p-2"
+          required
         />
         {error && <p className="text-red-600 text-sm">{error}</p>}
-        <button
-          type="submit"
-          className="w-full bg-blue-800 text-white py-2 rounded hover:bg-blue-900"
-        >
+        <button type="submit" className="bg-blue-700 text-white w-full py-2 rounded hover:bg-blue-800">
           Login
         </button>
       </form>
