@@ -1,7 +1,8 @@
-import { useKeenSlider } from 'keen-slider/react'
-import 'keen-slider/keen-slider.min.css'
+// src/pages/Home.tsx
 import { useEffect } from 'react'
+import { useKeenSlider } from 'keen-slider/react'
 import { Helmet } from 'react-helmet'
+import 'keen-slider/keen-slider.min.css'
 
 export default function Home() {
   const [sliderRef, instanceRef] = useKeenSlider<HTMLDivElement>({
@@ -16,6 +17,19 @@ export default function Home() {
     },
   })
 
+  // 🔥 Prefetch teams list on page load
+  useEffect(() => {
+    const prefetchTeams = async () => {
+      try {
+        await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/approved-members?status=approved`)
+      } catch (error) {
+        console.error('Prefetch failed:', error)
+      }
+    }
+    prefetchTeams()
+  }, [])
+
+  // 🔄 Keep sliding the carousel every 3 seconds
   useEffect(() => {
     const interval = setInterval(() => {
       instanceRef.current?.next()
@@ -149,8 +163,6 @@ export default function Home() {
             </a>
           </div>
         </section>
-
-       
       </div>
     </>
   )
